@@ -142,9 +142,23 @@ public class AppLockImpl extends AppLock {
     }
 
     @Override
-    public void enable() {
+    public void setupPin() {
         lockScreenIntent = new Intent(context, HandyCodeLockScreen.class);
         lockScreenIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
+        context.startService(lockScreenIntent);
+    }
+
+    @Override
+    public void changePin() {
+        lockScreenIntent = new Intent(context, HandyCodeLockScreen.class);
+        lockScreenIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.CHANGE_PIN);
+        context.startService(lockScreenIntent);
+    }
+
+    @Override
+    public void enable() {
+        lockScreenIntent = new Intent(context, HandyCodeLockScreen.class);
+        lockScreenIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
         context.startService(lockScreenIntent);
     }
 

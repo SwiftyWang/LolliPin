@@ -24,20 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button_change_pin"
-        android:text="Check"/>
-
-    <Button
-        android:id="@+id/button_compat_locked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_unlock_pin"
-        android:text="Go to PinCompatActivity"/>
-
-    <Button
-        android:id="@+id/button_not_locked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_compat_locked"
-        android:text="Go to NotLockedActivity"/>
+        android:text="unlock"/>
 
 </RelativeLayout>

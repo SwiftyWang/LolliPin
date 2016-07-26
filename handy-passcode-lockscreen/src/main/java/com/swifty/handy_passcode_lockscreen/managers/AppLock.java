@@ -96,6 +96,10 @@ public abstract class AppLock {
      * {@link com.swifty.handy_passcode_lockscreen.managers.AppLockImpl} as the
      * {@link com.swifty.handy_passcode_lockscreen.interfaces.LifeCycleInterface}
      */
+    public abstract void setupPin();
+
+    public abstract void changePin();
+
     public abstract void enable();
 
     /**
@@ -114,7 +118,6 @@ public abstract class AppLock {
     public abstract long getLastActiveMillis();
 
     /**
-     *
      * Set in {@link com.swifty.handy_passcode_lockscreen.interfaces.LifeCycleInterface#onLockCodeDismiss(Activity)}
      * and {@link com.swifty.handy_passcode_lockscreen.interfaces.LifeCycleInterface#onLockCodeShow(Activity)}
      */

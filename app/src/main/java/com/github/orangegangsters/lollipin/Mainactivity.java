@@ -24,7 +24,19 @@ public class MainActivity extends Activity {
         findViewById(R.id.button_enable_pin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LockManager.getInstance().enableAppLock(MainActivity.this);
+                LockManager.getInstance().setupLock(MainActivity.this);
+            }
+        });
+        findViewById(R.id.button_unlock_pin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LockManager.getInstance().enableLock();
+            }
+        });
+        findViewById(R.id.button_change_pin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LockManager.getInstance().changePin();
             }
         });
     }

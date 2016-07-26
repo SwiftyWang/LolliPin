@@ -136,7 +136,7 @@ public abstract class PassCodeLockScreen extends PinLockScreen implements Keyboa
     private void enableAppLockerIfDoesNotExist() {
         try {
             if (mLockManager.getAppLock() == null) {
-                mLockManager.enableAppLock(this);
+                mLockManager.setupLock(this);
             }
         } catch (Exception e) {
             Log.e(TAG, e.toString());

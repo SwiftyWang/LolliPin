@@ -33,11 +33,16 @@ public class LockManager {
         return mInstance;
     }
 
+    public void changePin() {
+        if (mAppLocker != null) {
+            mAppLocker.changePin();
+        }
+    }
+
     /**
-     * You must call that into your custom {@link android.app.Application} to enable the
-     * {@link PinLockScreen}
+     * setup a new lock.
      */
-    public void enableAppLock(Context context) {
+    public void setupLock(Context context) {
         if (mAppLocker != null) {
             mAppLocker.disable();
         }
@@ -45,6 +50,15 @@ public class LockManager {
         mAppLocker.enable();
     }
 
+    /**
+     * You must call that into your custom {@link android.app.Application} to enable the
+     * {@link PinLockScreen}
+     */
+    public void enableLock() {
+        if (mAppLocker != null) {
+            mAppLocker.enable();
+        }
+    }
 
     /**
      * Disables the app lock by calling {@link AppLock#disable()}
