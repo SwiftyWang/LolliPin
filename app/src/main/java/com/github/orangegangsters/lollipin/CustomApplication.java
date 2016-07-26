@@ -2,9 +2,7 @@ package com.github.orangegangsters.lollipin;
 
 import android.app.Application;
 
-import com.github.orangegangsters.lollipin.lib.managers.LockManager;
-
-import lollipin.orangegangsters.github.com.lollipin.R;
+import com.swifty.handy_passcode_lockscreen.managers.LockManager;
 
 /**
  * Created by oliviergoutay on 1/14/15.
@@ -15,9 +13,5 @@ public class CustomApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        LockManager<CustomPinActivity> lockManager = LockManager.getInstance();
-        lockManager.enableAppLock(this, CustomPinActivity.class);
-        lockManager.getAppLock().setLogoId(R.drawable.security_lock);
     }
 }

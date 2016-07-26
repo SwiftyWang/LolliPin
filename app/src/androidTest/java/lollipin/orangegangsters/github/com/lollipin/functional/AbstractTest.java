@@ -5,14 +5,13 @@ import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
-import com.github.orangegangsters.lollipin.MainActivity;
 import com.github.orangegangsters.lollipin.lib.managers.LockManager;
 import com.robotium.solo.Solo;
 
 /**
  * Created by stoyan and oliviergoutay on 1/13/15.
  */
-public class AbstractTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class AbstractTest extends ActivityInstrumentationTestCase2<MainLockScreen> {
 
     protected static final String PASSWORD_PREFERENCE_KEY = "PASSCODE";
     protected static final String PASSWORD_ALGORITHM_PREFERENCE_KEY = "ALGORITHM";
@@ -22,7 +21,7 @@ public class AbstractTest extends ActivityInstrumentationTestCase2<MainActivity>
     protected Solo solo;
 
     public AbstractTest() {
-        super(MainActivity.class);
+        super(MainLockScreen.class);
     }
 
     public void setUp() throws Exception {
