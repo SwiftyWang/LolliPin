@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -70,11 +73,15 @@ public abstract class PassCodeLockScreen extends PinLockScreen implements Keyboa
     }
 
     private void setContentView(int contentView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) return;
+        }
+        hideNavigationBar(this);
         if (overLay == null) {
             params = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                    WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
                     // Keeps the button presses from going to the background window
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                             // Enables the notification to recieve touch events
@@ -91,6 +98,10 @@ public abstract class PassCodeLockScreen extends PinLockScreen implements Keyboa
             wm.addView(overLay, params);
         }
     }
+
+    protected abstract void showNavigationBar(Context context);
+
+    protected abstract void hideNavigationBar(Context context);
 
     /**
      * Init completely the layout, depending of the extra {@link com.swifty.handy_passcode_lockscreen.managers.AppLock#EXTRA_TYPE}
@@ -136,7 +147,7 @@ public abstract class PassCodeLockScreen extends PinLockScreen implements Keyboa
     private void enableAppLockerIfDoesNotExist() {
         try {
             if (mLockManager.getAppLock() == null) {
-                mLockManager.setupLock(this);
+                mLockManager.setupLock(this, getCustomAppLockActivityClass());
             }
         } catch (Exception e) {
             Log.e(TAG, e.toString());
@@ -196,6 +207,7 @@ public abstract class PassCodeLockScreen extends PinLockScreen implements Keyboa
                 }
             }
         }
+        showNavigationBar(this);
         overLay.animate().withLayer().alpha(0f).y(overLay.getMeasuredHeight()).setDuration(300).setListener(listener).start();
     }
 
@@ -209,7 +221,11 @@ public abstract class PassCodeLockScreen extends PinLockScreen implements Keyboa
         public void onAnimationEnd(Animator animator) {
             //remove overlays
             overLay.setVisibility(View.GONE);
-            wm.removeView(overLay);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (overLay.isAttachedToWindow()) {
+                    wm.removeView(overLay);
+                }
+            }
         }
 
         @Override

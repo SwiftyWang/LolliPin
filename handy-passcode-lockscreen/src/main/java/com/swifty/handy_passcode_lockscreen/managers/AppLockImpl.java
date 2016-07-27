@@ -6,7 +6,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 
-import com.swifty.handy_passcode_lockscreen.HandyCodeLockScreen;
+import com.swifty.handy_passcode_lockscreen.DefaultCodeLockScreen;
+import com.swifty.handy_passcode_lockscreen.PassCodeLockScreen;
 import com.swifty.handy_passcode_lockscreen.encryption.Encryptor;
 import com.swifty.handy_passcode_lockscreen.enums.Algorithm;
 
@@ -17,7 +18,7 @@ import java.util.Random;
 /**
  * Created by swifty on 26/7/2016.
  */
-public class AppLockImpl extends AppLock {
+public class AppLockImpl<T extends PassCodeLockScreen> extends AppLock {
 
     private static final String LAST_ACTIVE_MILLIS_PREFERENCE_KEY = "LAST_ACTIVE_MILLIS_PREFERENCE_KEY";
     /**
@@ -77,17 +78,20 @@ public class AppLockImpl extends AppLock {
     private final Context context;
     private final SharedPreferences mSharedPreferences;
     private Intent lockScreenIntent;
+    private final Class<T> lockScreen;
 
-    private AppLockImpl(Context context) {
+    private AppLockImpl(Context context, Class<T> lockScreen) {
         super();
+        this.lockScreen = lockScreen;
         this.context = context;
         this.mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static AppLockImpl getInstance(Context context) {
+    public static AppLockImpl getInstance(Context context, Class<? extends PassCodeLockScreen> tClass) {
         synchronized (LockManager.class) {
             if (mInstance == null) {
-                mInstance = new AppLockImpl(context);
+                if(tClass ==null) tClass = DefaultCodeLockScreen.class;
+                mInstance = new AppLockImpl<>(context, tClass);
             }
         }
         return mInstance;
@@ -143,21 +147,21 @@ public class AppLockImpl extends AppLock {
 
     @Override
     public void setupPin() {
-        lockScreenIntent = new Intent(context, HandyCodeLockScreen.class);
+        lockScreenIntent = new Intent(context, lockScreen);
         lockScreenIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
         context.startService(lockScreenIntent);
     }
 
     @Override
     public void changePin() {
-        lockScreenIntent = new Intent(context, HandyCodeLockScreen.class);
+        lockScreenIntent = new Intent(context, lockScreen);
         lockScreenIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.CHANGE_PIN);
         context.startService(lockScreenIntent);
     }
 
     @Override
     public void enable() {
-        lockScreenIntent = new Intent(context, HandyCodeLockScreen.class);
+        lockScreenIntent = new Intent(context, lockScreen);
         lockScreenIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
         context.startService(lockScreenIntent);
     }

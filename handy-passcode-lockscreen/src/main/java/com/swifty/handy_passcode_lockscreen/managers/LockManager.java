@@ -2,6 +2,7 @@ package com.swifty.handy_passcode_lockscreen.managers;
 
 import android.content.Context;
 
+import com.swifty.handy_passcode_lockscreen.DefaultCodeLockScreen;
 import com.swifty.handy_passcode_lockscreen.PinLockScreen;
 import com.swifty.handy_passcode_lockscreen.PassCodeLockScreen;
 
@@ -10,7 +11,7 @@ import com.swifty.handy_passcode_lockscreen.PassCodeLockScreen;
  * the actual app calling the library.
  * You must get this static instance by calling {@link #getInstance()}
  */
-public class LockManager {
+public class LockManager<T extends PassCodeLockScreen> {
 
     /**
      * The static singleton instance
@@ -27,37 +28,42 @@ public class LockManager {
     public static LockManager getInstance() {
         synchronized (LockManager.class) {
             if (mInstance == null) {
-                mInstance = new LockManager();
+                mInstance = new LockManager<>();
             }
         }
         return mInstance;
     }
 
-    public void changePin() {
+    public void changePin(Context applicationContext, Class<T> tClass) {
         if (mAppLocker != null) {
-            mAppLocker.changePin();
+            mAppLocker.disable();
         }
+        mAppLocker = AppLockImpl.getInstance(applicationContext, tClass);
+        mAppLocker.changePin();
     }
+
 
     /**
      * setup a new lock.
      */
-    public void setupLock(Context context) {
+    public void setupLock(Context applicationContext, Class<T> tClass) {
         if (mAppLocker != null) {
             mAppLocker.disable();
         }
-        mAppLocker = AppLockImpl.getInstance(context);
-        mAppLocker.enable();
+        mAppLocker = AppLockImpl.getInstance(applicationContext, tClass);
+        mAppLocker.setupPin();
     }
 
     /**
      * You must call that into your custom {@link android.app.Application} to enable the
      * {@link PinLockScreen}
      */
-    public void enableLock() {
+    public void enableLock(Context applicationContext, Class<T> tClass) {
         if (mAppLocker != null) {
-            mAppLocker.enable();
+            mAppLocker.disable();
         }
+        mAppLocker = AppLockImpl.getInstance(applicationContext, tClass);
+        mAppLocker.enable();
     }
 
     /**

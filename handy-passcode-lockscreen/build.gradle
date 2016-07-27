@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 ext {
-    supportVersion = '24.0.0'
+    supportVersion = '23.0.0'
 }
 
 android {
